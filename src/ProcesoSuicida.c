@@ -5,46 +5,18 @@
 #include <sys/types.h>
 #include <unistd.h>
 
-int
-main(int argc, 
-     char *argv[], 
-     char *env[]) {
+int main(int argc, char *argv[], char *env[]) {
 
-  int value1;
-  int value2;
+	// the generator produces one initial seed, (the cause for the suicide)
+  srand(time(NULL));
+  int res, cause = rand()%6;
 
-  /* Genera un numero aleatorio para determinar cual
-     sera la causa del suicidio */
-  srandom(time(NULL));
+	if( !cause ) exit(rand()%10);
+	else if( cause == 1 ) res = res/0;
+	else if( cause == 2 ) kill(getpid(), SIGKILL);
+  else if( cause == 3 ) alarm(random() % 60);
+  else if( cause == 4 ) __asm__("sti");
+	else if( cause == 5 ) res = *((int*) NULL);
 
-  switch (random() % 7) {
-  case 0: /* Suicidio voluntario */
-    exit(random() % 10);
-    break;
-
-  case 1: /* Muerte por descuido */
-    value1 = value1 / (value2 - value2);
-    break;
-
-  case 2: /* Auto-asesinato */
-    kill(getpid(), SIGKILL);
-    break;
-
-  case 3: /* Suicidio por espera */
-    alarm(random() % 60); /* Espera hasta maximo 60 segundos */
-    break;
-
-  case 4: /* Asesinado en intento de terrorismo */
-    __asm__("sti");
-    break;
-
-  case 5: /* Muerte por mal comportamiento */
-    value1 = *((int*) NULL);
-    break;
-
-  default:
-    break;
-  }
-
-  return 0; /* Muerte despues de una vida productiva */
+  return 0;
 }
